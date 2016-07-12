@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("EDFInfo")]
+[assembly: AssemblyTitle("EDFSharpLib")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("EDFInfo")]
+[assembly: AssemblyProduct("EDFSharpLib")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("9ec1cacd-32aa-40b2-b9cf-dbc0befe6378")]
+[assembly: Guid("7e8b16eb-eb43-4a0f-b4aa-d00bfe41ebe2")]
 
 // Version information for an assembly consists of the following four values:
 //
