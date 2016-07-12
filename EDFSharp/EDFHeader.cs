@@ -1,172 +1,135 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
 
 namespace EDFSharp
 {
+    public class ItemLengths
+    {
+        //Fixed length items
+        public const int Version = 8;
+        public const int PatientID = 80;
+        public const int RecordID = 80;
+        public const int StartDate = 8;
+        public const int StartTime = 8;
+        public const int NumberOfBytesInHeader = 8;
+        public const int Reserved = 44;
+        public const int NumberOfDataRecords = 8;
+        public const int DurationOfDataRecord = 8;
+        public const int NumberOfSignals = 4;
+
+        //Variable length items
+        public const int Label = 16;
+        public const int TransducerType = 80;
+        public const int PhysicalDimension = 8;
+        public const int PhysicalMinimum = 8;
+        public const int PhysicalMaximum = 8;
+        public const int DigitalMinimum = 8;
+        public const int DigitalMaximum = 8;
+        public const int Prefiltering = 80;
+        public const int NumberOfSamples = 8;
+        public const int SignalsReserved = 32;
+    }
+
     public interface IHeaderItem
     {
         string ToAscii();
     }
 
-    public class StringItem : IHeaderItem
+    public class FixedLengthString : IHeaderItem
     {
         public string Value { get; set; }
-
-        public string ToAscii()
-        {
-            throw new NotImplementedException();
-        }
+        public int AsciiLength { get; private set; } = 0;
+        public FixedLengthString(int asciiLength){ AsciiLength = asciiLength; }
+        public string ToAscii() { return Value.PadRight(AsciiLength, ' '); }
     }
 
-    public class IntegerItem : IHeaderItem
+    public class FixedLengthInt : IHeaderItem
     {
         public int Value { get; set; }
-
-        public string ToAscii()
-        {
-            throw new NotImplementedException();
-        }
+        public int AsciiLength { get; private set; } = 0;
+        public FixedLengthInt(int asciiLength) { AsciiLength = asciiLength; }
+        public string ToAscii() { return Value.ToString().PadRight(AsciiLength, ' '); }
     }
 
-    public class DoubleItem : IHeaderItem
+    public class FixedLengthDouble : IHeaderItem
     {
         public double Value { get; set; }
+        public int AsciiLength { get; private set; } = 0;
+        public FixedLengthDouble(int asciiLength) { AsciiLength = asciiLength; }
+        public string ToAscii() { return Value.ToString().PadRight(AsciiLength, ' '); }
+    }
 
-        public string ToAscii()
-        {
-            throw new NotImplementedException();
-        }
+    public class VariableLengthString : IHeaderItem
+    {
+        public string[] Value { get; set; }
+        public VariableLengthString() {  }
+        public string ToAscii() { return String.Join("", Value); }
+    }
+
+    public class VariableLengthInt : IHeaderItem
+    {
+        public int[] Value { get; set; }
+        public VariableLengthInt() { }
+        public string ToAscii() { return String.Join("", Value); }
+    }
+
+    public class VariableLengthDouble : IHeaderItem
+    {
+        public double[] Value { get; set; }
+        public VariableLengthDouble() { }
+        public string ToAscii() { return String.Join("", Value); }
     }
 
     public class EDFHeader
     {
-        public StringItem Version { get; set; } = new StringItem();
-        public StringItem PatientID { get; set; } = new StringItem();
-        public StringItem RecordID { get; set; } = new StringItem();
-        public StringItem StartDate { get; set; } = new StringItem();
-        public StringItem StartTime { get; set; } = new StringItem();
-        public IntegerItem NumberOfBytesInHeader { get; set; } = new IntegerItem();
-        public StringItem Reserved { get; set; } = new StringItem();
-        public IntegerItem NumberOfDataRecords { get; set; } = new IntegerItem();
-        public IntegerItem DurationOfDataRecord { get; set; } = new IntegerItem();
-        public IntegerItem NumberOfSignals { get; set; } = new IntegerItem();
-        public StringItem Labels { get; set; } = new StringItem();
-        public StringItem TransducerType { get; set; } = new StringItem();
-        public StringItem PhysicalDimension { get; set; } = new StringItem();
-        public DoubleItem PhysicalMinimum { get; set; } = new DoubleItem();
-        public DoubleItem PhysicalMaximum { get; set; } = new DoubleItem();
-        public IntegerItem DigitalMinimum { get; set; } = new IntegerItem();
-        public IntegerItem DigitalMaximum { get; set; } = new IntegerItem();
-        public StringItem Prefiltering { get; set; } = new StringItem();
-        public StringItem NumberOfSamplesInDataRecord { get; set; } = new StringItem();
-        public StringItem SignalsReserved { get; set; } = new StringItem();
+        public FixedLengthString Version { get; private set; } = new FixedLengthString(ItemLengths.Version);
+        public FixedLengthString PatientID { get; private set; } = new FixedLengthString(ItemLengths.PatientID);
+        public FixedLengthString RecordID { get; private set; } = new FixedLengthString(ItemLengths.RecordID);
+        public FixedLengthString StartDate { get; private set; } = new FixedLengthString(ItemLengths.StartDate);
+        public FixedLengthString StartTime { get; private set; } = new FixedLengthString(ItemLengths.StartTime);
+        public FixedLengthInt NumberOfBytesInHeader { get; private set; } = new FixedLengthInt(ItemLengths.NumberOfBytesInHeader);
+        public FixedLengthString Reserved { get; private set; } = new FixedLengthString(ItemLengths.Reserved);
+        public FixedLengthInt NumberOfDataRecords { get; private set; } = new FixedLengthInt(ItemLengths.NumberOfDataRecords);
+        public FixedLengthInt DurationOfDataRecord { get; private set; } = new FixedLengthInt(ItemLengths.DurationOfDataRecord);
+        public FixedLengthInt NumberOfSignals { get; private set; } = new FixedLengthInt(ItemLengths.NumberOfSignals);
+
+        public VariableLengthString Labels { get; private set; } = new VariableLengthString();
+        public VariableLengthString TransducerType { get; private set; } = new VariableLengthString();
+        public VariableLengthString PhysicalDimension { get; private set; } = new VariableLengthString();
+        public VariableLengthDouble PhysicalMinimum { get; private set; } = new VariableLengthDouble();
+        public VariableLengthDouble PhysicalMaximum { get; private set; } = new VariableLengthDouble();
+        public VariableLengthInt DigitalMinimum { get; private set; } = new VariableLengthInt();
+        public VariableLengthInt DigitalMaximum { get; private set; } = new VariableLengthInt();
+        public VariableLengthString Prefiltering { get; private set; } = new VariableLengthString();
+        public VariableLengthInt NumberOfSamplesInDataRecord { get; private set; } = new VariableLengthInt();
+        public VariableLengthString SignalsReserved { get; private set; } = new VariableLengthString();
 
         public EDFHeader() { }
-
-        public EDFHeader(string edfFilePath)
-        {
-            ReadFromFile(edfFilePath);
-        }
-
-        public void ReadFromFile(string edfFilePath)
-        {
-            Console.WriteLine("EDF file path: " + edfFilePath);
-            Console.WriteLine("Number of bytes in file: " + File.ReadAllBytes(edfFilePath).Length);
-
-            //Print the header
-            using (BinaryReader b = new BinaryReader(File.Open(edfFilePath, FileMode.Open)))
-            {
-                //------ Fixed length header part --------
-                Version.Value               = ReadAscii(b, 8);
-                PatientID.Value             = ReadAscii(b, 80);
-                RecordID.Value              = ReadAscii(b, 80);
-                StartDate.Value             = ReadAscii(b, 8);
-                StartTime.Value             = ReadAscii(b, 8);
-                NumberOfBytesInHeader.Value = ReadInt16(b, 8);
-                Reserved.Value              = ReadAscii(b, 44);
-                NumberOfDataRecords.Value   = ReadInt16(b, 8);
-                DurationOfDataRecord.Value  = ReadInt16(b, 8);
-                NumberOfSignals.Value       = ReadInt16(b, 4);
-
-                //------ Variable length header part --------
-                int ns = NumberOfSignals.Value;
-                Labels.Value                        = ReadAscii(b, ns * 16);
-                TransducerType.Value                = ReadAscii(b, ns * 80);
-                PhysicalDimension.Value             = ReadAscii(b, ns * 8);
-                PhysicalMinimum.Value               = ReadDouble(b, ns * 8);
-                PhysicalMaximum.Value               = ReadDouble(b, ns * 8);
-                DigitalMinimum.Value                = ReadInt16(b, ns * 8);
-                DigitalMaximum.Value                = ReadInt16(b, ns * 8);
-                Prefiltering.Value                  = ReadAscii(b, ns * 80);
-                NumberOfSamplesInDataRecord.Value   = ReadAscii(b, ns * 8);
-                SignalsReserved.Value               = ReadAscii(b, ns * 32);
-            }
-
-            File.WriteAllText(edfFilePath + ".txt", this.ToString());
-        }
-
-        private Int16 ReadInt16(BinaryReader bReader, int asciiLength)
-        {
-            string strInt = ReadAscii(bReader, asciiLength).Trim();
-            Int16 intResult = -1;
-            try { intResult = Convert.ToInt16(strInt); }
-            catch (Exception ex) { Console.WriteLine("Error, could not convert string to intger. " + ex.Message); }
-            return intResult;
-        }
-
-        private Int64 ReadInt64(BinaryReader bReader, int asciiLength)
-        {
-            string strInt = ReadAscii(bReader, asciiLength).Trim();
-            Int64 intResult = -1;
-            try { intResult = Convert.ToInt64(strInt); }
-            catch (Exception ex) { Console.WriteLine("Error, could not convert string to intger. " + ex.Message); }
-            return intResult;
-        }
-
-        private double ReadDouble(BinaryReader bReader, int asciiLength)
-        {
-            string strDouble = ReadAscii(bReader, asciiLength).Trim();
-            return Convert.ToDouble(strDouble);
-        }
-
-        private string ReadAscii(BinaryReader bReader, int length)
-        {
-            byte[] bytes = bReader.ReadBytes(length);
-            return AsciiString(bytes);
-        }
-
-        private static string AsciiString(byte[] bytes)
-        {
-            return Encoding.ASCII.GetString(bytes);
-        }
 
         public override string ToString()
         {
             string strOutput = "";
 
-            strOutput += "8b\tVersion [" + Version + "]\n";
-            strOutput += "80b\tPatient ID [" + PatientID + "]\n";
-            strOutput += "80b\tRecording ID [" + RecordID + "]\n";
-            strOutput += "8b\tStart Date [" + StartDate + "]\n";
-            strOutput += "8b\tStart Time [" + StartTime + "\n]";
-            strOutput += "8b\tNumber of bytes in header [" + NumberOfBytesInHeader + "]\n";
-            strOutput += "44b\tReserved [" + Reserved + "]\n";
-            strOutput += "8b\tNumber of data records [" + NumberOfDataRecords + "]\n";
-            strOutput += "8b\tDuration of data record [" + DurationOfDataRecord + "]\n";
-            strOutput += "4b\tNumber of signals [" + NumberOfSignals + "]\n";
+            strOutput += "8b\tVersion [" + Version.Value + "]\n";
+            strOutput += "80b\tPatient ID [" + PatientID.Value + "]\n";
+            strOutput += "80b\tRecording ID [" + RecordID.Value + "]\n";
+            strOutput += "8b\tStart Date [" + StartDate.Value + "]\n";
+            strOutput += "8b\tStart Time [" + StartTime.Value + "\n]";
+            strOutput += "8b\tNumber of bytes in header [" + NumberOfBytesInHeader.Value + "]\n";
+            strOutput += "44b\tReserved [" + Reserved.Value + "]\n";
+            strOutput += "8b\tNumber of data records [" + NumberOfDataRecords.Value + "]\n";
+            strOutput += "8b\tDuration of data record [" + DurationOfDataRecord.Value + "]\n";
+            strOutput += "4b\tNumber of signals [" + NumberOfSignals.Value + "]\n";
 
-            strOutput += "\tLabels [" + Labels + "]\n";
-            strOutput += "\tTransducer type [" + TransducerType + "]\n";
-            strOutput += "\tPhysical dimension [" + PhysicalDimension + "]\n";
-            strOutput += "\tPhysical minimum [" + PhysicalMinimum + "]\n";
-            strOutput += "\tPhysical maximum [" + PhysicalMaximum + "]\n";
-            strOutput += "\tDigital minimum [" + DigitalMinimum + "]\n";
-            strOutput += "\tDigital maximum [" + DigitalMaximum + "]\n";
-            strOutput += "\tPrefiltering [" + Prefiltering + "]\n";
-            strOutput += "\tNumber of samples in data record [" + NumberOfSamplesInDataRecord + "]\n";
-            strOutput += "\tSignals reserved [" + SignalsReserved + "]\n";
+            strOutput += "\tLabels [" + Labels.Value + "]\n";
+            strOutput += "\tTransducer type [" + TransducerType.Value + "]\n";
+            strOutput += "\tPhysical dimension [" + PhysicalDimension.Value + "]\n";
+            strOutput += "\tPhysical minimum [" + PhysicalMinimum.Value + "]\n";
+            strOutput += "\tPhysical maximum [" + PhysicalMaximum.Value + "]\n";
+            strOutput += "\tDigital minimum [" + DigitalMinimum.Value + "]\n";
+            strOutput += "\tDigital maximum [" + DigitalMaximum.Value + "]\n";
+            strOutput += "\tPrefiltering [" + Prefiltering.Value + "]\n";
+            strOutput += "\tNumber of samples in data record [" + NumberOfSamplesInDataRecord.Value + "]\n";
+            strOutput += "\tSignals reserved [" + SignalsReserved.Value + "]\n";
 
             Console.WriteLine("\n---------- EDF File Header ---------\n" + strOutput);
 

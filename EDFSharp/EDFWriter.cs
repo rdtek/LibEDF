@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 
 namespace EDFSharp
 {
     class EDFWriter : BinaryWriter
     {
-        public EDFWriter(FileStream fs) : base(fs)
-        {
-
-        }
+        public EDFWriter(FileStream fs) : base(fs) {}
 
         public void WriteHeaderItem(IHeaderItem item, int requiredLength)
         {

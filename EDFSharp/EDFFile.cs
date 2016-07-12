@@ -12,82 +12,26 @@ namespace EDFSharp
 
         public EDFFile() { }
         public EDFFile(string edfFilePath) {
-            //Read the header and signal data from the EDF file
-            ReadFile(edfFilePath);
+            Open(edfFilePath);
         }
 
-        public void ReadFile(string edfFilePath)
+        public void Open(string edfFilePath)
         {
-            ReadHeader(edfFilePath);
-            ReadSignals(edfFilePath);
+            Console.WriteLine("EDF file path: " + edfFilePath);
+            Console.WriteLine("Number of bytes in file: " + File.ReadAllBytes(edfFilePath).Length);
 
-            Console.WriteLine(Signals[0].ToString());
-            Console.WriteLine(Signals[1].ToString());
+            var r = new EDFReader(File.Open(edfFilePath, FileMode.Open));
+            Header = r.ReadHeader();
+            Signals = r.ReadSignals();
+            r.Close();
         }
 
-        private void ReadHeader(string edfFilePath)
-        {
-            Header = new EDFHeader(edfFilePath);
-        }
-
-        private void ReadSignals(string edfFilePath)
-        {
-            char[] splitChar = new char[] { ' ' };
-            string[] labels = Header.Labels.Value.Split(splitChar, StringSplitOptions.RemoveEmptyEntries);
-            string[] strNumSamples = Header.NumberOfSamplesInDataRecord.Value.ToString()
-                .Split(splitChar, StringSplitOptions.RemoveEmptyEntries);
-
-            //Init signal objects
-            Signals = new EDFSignal[Header.NumberOfSignals.Value];
-            
-            for (int i = 0; i < Signals.Length; i++)
-            {
-                var sig = new EDFSignal();
-                sig.Label = labels[i];
-                sig.NumberOfSamples = Convert.ToInt16(strNumSamples[i]);
-                Signals[i] = sig;
-            }
-
-            //Read the signal sample values
-            int readPosition = Header.NumberOfBytesInHeader.Value;
-
-            for (int i = 0; i < Signals.Length; i++)
-            {
-                Signals[i].Samples = ReadSignalSamples(edfFilePath, readPosition, Signals[i].NumberOfSamples);
-                readPosition += Signals[i].Samples.Length * 2; //2 bytes per integer.
-            }
-        }
-
-        private short[] ReadSignalSamples(string edfFilePath, int startPosition, int numberOfSamples)
-        {
-            var samples = new List<short>();
-            int countBytesRead = 0;
-
-            using (BinaryReader bReader = new BinaryReader(File.Open(edfFilePath, FileMode.Open)))
-            {
-                bReader.BaseStream.Seek(startPosition, SeekOrigin.Begin);
-
-                while(countBytesRead < numberOfSamples * 2) //2 bytes per integer
-                {
-                    byte[] intBytes = bReader.ReadBytes(2);
-                    short intVal = BitConverter.ToInt16(intBytes, 0);
-                    samples.Add(intVal);
-                    countBytesRead += intBytes.Length;
-                }
-            }
-
-            return samples.ToArray();
-        }
-
-        public void WriteFile(string edfFilePath)
+        public void Save(string edfFilePath)
         {
             if (Header == null) return;
             
-            //Write the header first
             Console.WriteLine("Writing header.");
-
             var hw = new EDFWriter(File.Open(edfFilePath, FileMode.Create));
-
             Header.NumberOfBytesInHeader.Value = CalcNumOfBytesInHeader();
 
             //----------------- Fixed length header items -----------------
@@ -105,16 +49,16 @@ namespace EDFSharp
             //----------------- Variable length header items -----------------
             int ns = Signals.Length;
 
-            hw.WriteAsciiItem(StrJoin(Signals.Select(s => s.Label.PadRight(16, ' '))), ns * 16);
-            hw.WriteAsciiItem(StrJoin(Signals.Select(s => s.TransducerType.PadRight(8, ' '))), ns * 80);
-            hw.WriteAsciiItem(StrJoin(Signals.Select(s => s.PhysicalDimension.PadRight(8, ' '))), ns * 8);
-            hw.WriteAsciiItem(StrJoin(Signals.Select(s => s.PhysicalMinimum.PadRight(8, ' '))), ns * 8);
-            hw.WriteAsciiItem(StrJoin(Signals.Select(s => s.PhysicalMaximum.PadRight(8, ' '))), ns * 8);
-            hw.WriteAsciiItem(StrJoin(Signals.Select(s => s.DigitalMinimum.PadRight(8, ' '))), ns * 8);
-            hw.WriteAsciiItem(StrJoin(Signals.Select(s => s.DigitalMaximum.PadRight(8, ' '))), ns * 8);
-            hw.WriteAsciiItem(StrJoin(Signals.Select(s => s.Prefiltering.PadRight(32, ' '))), ns * 80);
-            hw.WriteAsciiItem(StrJoin(Signals.Select(s => s.NumberOfSamples.ToString().PadRight(8, ' '))), ns * 8);
-            hw.WriteAsciiItem(StrJoin(Signals.Select(s => s.NumberOfSamples.ToString().PadRight(8, ' '))), ns * 32);
+            hw.WriteAsciiItem(StrJoin(Signals.Select(s => s.Label.PadRight(16, ' '))), ns * ItemLengths.Label);
+            hw.WriteAsciiItem(StrJoin(Signals.Select(s => s.TransducerType.PadRight(80, ' '))), ns * ItemLengths.TransducerType);
+            hw.WriteAsciiItem(StrJoin(Signals.Select(s => s.PhysicalDimension.PadRight(8, ' '))), ns * ItemLengths.PhysicalDimension);
+            hw.WriteAsciiItem(StrJoin(Signals.Select(s => s.PhysicalMinimum.PadRight(8, ' '))), ns * ItemLengths.PhysicalMinimum);
+            hw.WriteAsciiItem(StrJoin(Signals.Select(s => s.PhysicalMaximum.PadRight(8, ' '))), ns * ItemLengths.PhysicalMaximum);
+            hw.WriteAsciiItem(StrJoin(Signals.Select(s => s.DigitalMinimum.PadRight(8, ' '))), ns * ItemLengths.DigitalMinimum);
+            hw.WriteAsciiItem(StrJoin(Signals.Select(s => s.DigitalMaximum.PadRight(8, ' '))), ns * ItemLengths.DigitalMaximum);
+            hw.WriteAsciiItem(StrJoin(Signals.Select(s => s.Prefiltering.PadRight(80, ' '))), ns * ItemLengths.Prefiltering);
+            hw.WriteAsciiItem(StrJoin(Signals.Select(s => s.NumberOfSamples.ToString().PadRight(8, ' '))), ns * ItemLengths.NumberOfSamples);
+            hw.WriteAsciiItem(StrJoin(Signals.Select(s => s.Reserved.ToString().PadRight(32, ' '))), ns * ItemLengths.SignalsReserved);
 
             Console.WriteLine("Writer position after header: " + hw.BaseStream.Position);
 

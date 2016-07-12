@@ -12,7 +12,7 @@ namespace EDFSharp
                 string filePath = args[0];
                 if (File.Exists(filePath)) {
                     EDFFile edf = new EDFFile(filePath);
-                    edf.WriteFile(filePath + "_cleaned.EDF");
+                    edf.Save(filePath + "_cleaned.EDF");
                 }
                 else {
                     Console.WriteLine("File does not exist.");
