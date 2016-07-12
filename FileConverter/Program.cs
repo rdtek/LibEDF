@@ -1,5 +1,5 @@
 ﻿using System;
-using EDFInfo;
+using EDFSharp;
 using InoviseCOM;
 
 namespace FileConverter

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace EDFInfo
+namespace EDFSharp
 {
     class Program
     {
@@ -10,21 +10,18 @@ namespace EDFInfo
             if (args != null && args.Length >= 1)
             {
                 string filePath = args[0];
-                if (File.Exists(filePath))
-                {
+                if (File.Exists(filePath)) {
                     EDFFile edf = new EDFFile(filePath);
                     edf.WriteFile(filePath + "_cleaned.EDF");
-                    Console.ReadLine();
                 }
-                else
-                {
+                else {
                     Console.WriteLine("File does not exist.");
                 }
             }
-            else
-            {
+            else {
                 Console.WriteLine("Input file not provided.");
             }
+            Console.ReadLine();
         }
     }
 }

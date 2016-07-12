@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace EDFInfo
+namespace EDFSharp
 {
     public class EDFSignal
     {

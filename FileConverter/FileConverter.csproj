@@ -50,12 +50,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\EDFInfo\EDFInfo.csproj">
-      <Project>{9ec1cacd-32aa-40b2-b9cf-dbc0befe6378}</Project>
-      <Name>EDFInfo</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <COMReference Include="InoviseCOM">
       <Guid>{894AF7EC-C369-4DFC-BBBA-6CD7A06E3FAF}</Guid>
       <VersionMajor>1</VersionMajor>
@@ -65,6 +59,12 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EDFSharp\EDFSharp.csproj">
+      <Project>{9ec1cacd-32aa-40b2-b9cf-dbc0befe6378}</Project>
+      <Name>EDFSharp</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
