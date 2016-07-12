@@ -26,10 +26,10 @@ Library to read and write EDF signal format files as defined in the [EDF specifi
 |ns * 8 ascii  | ns * nr of samples in each data record |
 |ns * 32 ascii | ns * reserved|
 
-### Header Record 
+### Data Record 
 
 |nr of samples[1] * integer | first signal in the data record |
 |nr of samples[2] * integer | second signal |
-|.. 
-|.. 
+|.. | |
+|.. | |
 |nr of samples[ns] * integer | last signal | 
