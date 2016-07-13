@@ -1,6 +1,8 @@
 # EDF-Sharp
 Library to read and write EDF signal format files as defined in the [EDF specification](http://www.edfplus.info/specs/edf.html).
 
+This project is provided under the terms of the [MIT license](http://choosealicense.com/licenses/mit/).
+
 ### Header Record 
 
 | # Chars | File description                               |
