@@ -15,22 +15,31 @@ namespace EDFSharp
             Open(edfFilePath);
         }
 
+        public EDFFile(byte[] edfBytes){
+            Open(edfBytes);
+        }
+
         public void Open(string edfFilePath)
         {
-            Console.WriteLine("EDF file path: " + edfFilePath);
-            Console.WriteLine("Number of bytes in file: " + File.ReadAllBytes(edfFilePath).Length);
+            using (var r = new EDFReader(File.Open(edfFilePath, FileMode.Open)))
+            {
+                Header = r.ReadHeader();
+                Signals = r.ReadSignals();
+            }
+        }
 
-            var r = new EDFReader(File.Open(edfFilePath, FileMode.Open));
-            Header = r.ReadHeader();
-            Signals = r.ReadSignals();
-            r.Close();
+        public void Open(byte[] edfBytes)
+        {
+            using (var r = new EDFReader(edfBytes))
+            {
+                Header = r.ReadHeader();
+                Signals = r.ReadSignals();
+            }
         }
 
         public void Save(string edfFilePath)
         {
             if (Header == null) return;
-            
-            Console.WriteLine("Writing header.");
             var hw = new EDFWriter(File.Open(edfFilePath, FileMode.Create));
             Header.NumberOfBytesInHeader.Value = CalcNumOfBytesInHeader();
 

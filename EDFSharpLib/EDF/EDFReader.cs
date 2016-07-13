@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 
 namespace EDFSharp
@@ -9,6 +8,7 @@ namespace EDFSharp
     class EDFReader : BinaryReader
     {
         public EDFReader(FileStream fs) : base(fs) { }
+        public EDFReader(byte[] edfBytes) : base(new MemoryStream(edfBytes)) { }
 
         public EDFHeader ReadHeader()
         {

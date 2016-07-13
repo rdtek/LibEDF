@@ -59,13 +59,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EDFFile.cs" />
-    <Compile Include="EDFHeader.cs" />
-    <Compile Include="EDFReader.cs" />
-    <Compile Include="EDFSignal.cs" />
-    <Compile Include="EDFWriter.cs" />
+    <Compile Include="EDF\EDFFile.cs" />
+    <Compile Include="EDF\EDFHeader.cs" />
+    <Compile Include="EDF\EDFReader.cs" />
+    <Compile Include="EDF\EDFSignal.cs" />
+    <Compile Include="EDF\EDFWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
