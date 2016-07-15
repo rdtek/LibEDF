@@ -56,7 +56,6 @@ namespace EDFSharpTests
             edf1.Header = h;
 
             string edfFilePath = @"C:\temp\test1.EDF";
-            edf1.Save(edfFilePath);
 
             //Read the file back
             var edf2 = new EDFFile(edfFilePath);
@@ -70,6 +69,7 @@ namespace EDFSharpTests
             Assert.AreEqual(edf2.Header.NumberOfDataRecords.ToAscii(),  edf1.Header.NumberOfDataRecords.ToAscii());
             Assert.AreEqual(edf2.Header.NumberOfSignals.ToAscii(),      edf1.Header.NumberOfSignals.ToAscii());
             Assert.AreEqual(edf2.Header.SignalsReserved.ToAscii(),      edf1.Header.SignalsReserved.ToAscii());
+            Assert.AreEqual(edf2.Signals[0].Samples.Length,             edf1.Signals[0].Samples.Length);
         }
     }
 }
