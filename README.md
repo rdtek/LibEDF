@@ -7,17 +7,24 @@ This project is provided under the terms of the [MIT license](http://choosealice
 
 ```cs
 //Load an existing EDF file.
-var edf = new EDFFile("C:\temp\example.edf");
+var edf = new EDFFile(@"C:\temp\example.edf");
  
 //Print some info
-Console.WriteLine(edf1.Header.PatientID.Value);
-Console.WriteLine(edf1.Header.NumberOfSignals.Value);
-Console.WriteLine(edf1.Header.StartDate.Value);
-Console.WriteLine(edf1.Signals[0].Label.Value);
-Console.WriteLine(String.Join(",", edf1.Signals[0].Samples.Skip(0).Take(10).ToArray()));
+Console.WriteLine(edf.Header.PatientID.Value);
+Console.WriteLine(edf.Header.NumberOfSignals.Value);
+Console.WriteLine(edf.Header.StartDate.Value);
+Console.WriteLine(edf.Signals[0].Label.Value);
+Console.WriteLine(String.Join(",", edf.Signals[0].Samples.Skip(0).Take(10).ToArray()));
 Console.WriteLine(edf1.Signals[1].Label.Value);
-Console.WriteLine(String.Join(",", edf1.Signals[1].Samples.Skip(0).Take(10).ToArray()));
+Console.WriteLine(String.Join(",", edf.Signals[1].Samples.Skip(0).Take(10).ToArray()));
 
+//Edit the file
+edf.Signals[0].Label.Value = "Signal 1";
+edf.Signals[0].Label.Value = "Signal 1";
+edf.Header.Reserved.Value = "Some extra metadata";
+edf.Signals[1].Samples = new short[] { 100, 120, 150, 200, 300, 270, 230, 190, 139, 150};
+
+edf1.Save(@"C:\edited.edf");
 ```
 
 ### Header Record 
