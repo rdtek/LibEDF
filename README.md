@@ -3,6 +3,23 @@ Library to read and write EDF signal format files as defined in the [EDF specifi
 
 This project is provided under the terms of the [MIT license](http://choosealicense.com/licenses/mit/).
 
+### Usage
+
+```cs
+//Load an existing EDF file.
+var edf = new EDFFile("C:\temp\example.edf");
+ 
+//Print some info
+Console.WriteLine(edf1.Header.PatientID.Value);
+Console.WriteLine(edf1.Header.NumberOfSignals.Value);
+Console.WriteLine(edf1.Header.StartDate.Value);
+Console.WriteLine(edf1.Signals[0].Label.Value);
+Console.WriteLine(String.Join(",", edf1.Signals[0].Samples.Skip(0).Take(10).ToArray()));
+Console.WriteLine(edf1.Signals[1].Label.Value);
+Console.WriteLine(String.Join(",", edf1.Signals[1].Samples.Skip(0).Take(10).ToArray()));
+
+```
+
 ### Header Record 
 
 | # Chars | File description                               |
