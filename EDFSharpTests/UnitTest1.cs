@@ -13,37 +13,33 @@ namespace EDFSharpTests
             //Write an EDF file with two signals then read it and check the data is correct
             var edf1 = new EDFFile();
 
-            var ecgSignal = new EDFSignal()
-            {
-                Label = "ECG",
-                NumberOfSamples = 10, //Small number of samples for testing
-                PhysicalDimension = "mV",
-                DigitalMinimum = "-2048",
-                DigitalMaximum = "2047",
-                PhysicalMinimum = "-10.2325",
-                PhysicalMaximum = "10.2325",
-                TransducerType = "UNKNOWN",
-                Prefiltering = "UNKNOWN",
-                Samples = new short[] { 100, 50, 23, 75, 12, 88, 73, 12, 34, 83 },
-                Reserved = "RESERVED"
-            };
+            var ecgSig = new EDFSignal();
+            ecgSig.Label.Value = "ECG";
+            ecgSig.NumberOfSamples.Value = 10; //Small number of samples for testing
+            ecgSig.PhysicalDimension.Value = "mV";
+            ecgSig.DigitalMinimum.Value = -2048;
+            ecgSig.DigitalMaximum.Value = 2047;
+            ecgSig.PhysicalMinimum.Value = -10.2325;
+            ecgSig.PhysicalMaximum.Value = 10.2325;
+            ecgSig.TransducerType.Value = "UNKNOWN";
+            ecgSig.Prefiltering.Value = "UNKNOWN";
+            ecgSig.Reserved.Value = "RESERVED";
+            ecgSig.Samples = new short[] { 100, 50, 23, 75, 12, 88, 73, 12, 34, 83 };
 
-            var soundSignal = new EDFSignal()
-            {
-                Label = "SOUND",
-                NumberOfSamples = 10, //Small number of samples for testing
-                PhysicalDimension = "mV",
-                DigitalMinimum = "-2048",
-                DigitalMaximum = "2047",
-                PhysicalMinimum = "-44",
-                PhysicalMaximum = "44.0",
-                TransducerType = "UNKNOWN",
-                Prefiltering = "UNKNOWN",
-                Samples = new short[] { 11, 200, 300, 123, 87, 204, 145, 234, 222, 75 },
-                Reserved = "RESERVED"
-            };
-
-            edf1.Signals = new EDFSignal[2] { ecgSignal, soundSignal };
+            var soundSig = new EDFSignal();
+            soundSig.Label.Value = "SOUND";
+            soundSig.NumberOfSamples.Value = 10;//Small number of samples for testing
+            soundSig.PhysicalDimension.Value = "mV";
+            soundSig.DigitalMinimum.Value = -2048;
+            soundSig.DigitalMaximum.Value = 2047;
+            soundSig.PhysicalMinimum.Value = -44;
+            soundSig.PhysicalMaximum.Value = 44.0;
+            soundSig.TransducerType.Value = "UNKNOWN";
+            soundSig.Prefiltering.Value = "UNKNOWN";
+            soundSig.Samples = new short[] { 11, 200, 300, 123, 87, 204, 145, 234, 222, 75 };
+            soundSig.Reserved.Value = "RESERVED";
+                        
+            edf1.Signals = new EDFSignal[2] { ecgSig, soundSig };
 
             var h = new EDFHeader();
             h.DurationOfDataRecord.Value = 1;

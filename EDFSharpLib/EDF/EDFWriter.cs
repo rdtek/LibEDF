@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
@@ -6,41 +7,38 @@ namespace EDFSharp
 {
     class EDFWriter : BinaryWriter
     {
-        public EDFWriter(FileStream fs) : base(fs) {}
+        public EDFWriter(FileStream fs) : base(fs) { }
 
-        public void WriteHeaderItem(IHeaderItem item, int requiredLength)
+        public void WriteItem(HeaderItem headerItem)
         {
-            byte[] itemBytes = AsciiToBytes(item.ToAscii());
-
+            string strItem = headerItem.ToAscii();
+            if (strItem == null) strItem = "";
+            byte[] itemBytes = AsciiToBytes(strItem);
             this.Write(itemBytes);
-            int numPadding = requiredLength - itemBytes.Length;
-
-            if (numPadding >= 1)
-            {
-                string strPadding = new string(' ', numPadding);
-                byte[] bPadding = Encoding.ASCII.GetBytes(strPadding);
-                this.Write(bPadding);
-            }
+            Console.WriteLine(headerItem.Name + " [" + strItem + "] \n\n-- ** BYTES LENGTH: " + itemBytes.Length 
+                + "> Position after write item: " + this.BaseStream.Position + "\n");
         }
 
-        public void WriteAsciiItem(string asciiItem, int requiredLength)
+        public void WriteItem(IEnumerable<HeaderItem> headerItems)
         {
-            if (asciiItem.Length > requiredLength)
-                asciiItem = asciiItem.Substring(0, requiredLength);
-
-            byte[] itemBytes = AsciiToBytes(asciiItem);
-
+            string joinedItems = StrJoin(headerItems);
+            if (joinedItems == null) joinedItems = "";
+            byte[] itemBytes = AsciiToBytes(joinedItems);
             this.Write(itemBytes);
-            int numPadding = requiredLength - itemBytes.Length;
+            Console.WriteLine("[" + joinedItems + "] \n\n-- ** BYTES LENGTH: " + itemBytes.Length 
+                + " Position after write item: " + this.BaseStream.Position + "\n");
+        }
 
-            if (numPadding >= 1)
+        private string StrJoin(IEnumerable<HeaderItem> list)
+        {
+            string joinedString = "";
+
+            foreach (var item in list)
             {
-                string strPadding = new string(' ', numPadding);
-                byte[] bPadding = Encoding.ASCII.GetBytes(strPadding);
-                this.Write(bPadding);
+                joinedString += item.ToAscii();
             }
 
-            Console.WriteLine("[" + asciiItem + "] \t\t<" + itemBytes .Length + "> Position after write item: " + this.BaseStream.Position);
+            return joinedString;
         }
 
         private static byte[] AsciiToBytes(string strItem)
@@ -60,7 +58,7 @@ namespace EDFSharp
         public void WriteSignal(EDFSignal signal)
         {
             Console.WriteLine("Write position before signal: " + this.BaseStream.Position);
-            for (int i = 0; i < signal.NumberOfSamples; i++)
+            for (int i = 0; i < signal.NumberOfSamples.Value; i++)
             {
                 this.Write(BitConverter.GetBytes(signal.Samples[i]));
             }
