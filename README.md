@@ -15,16 +15,16 @@ Console.WriteLine(edf.Header.NumberOfSignals.Value);
 Console.WriteLine(edf.Header.StartDate.Value);
 Console.WriteLine(edf.Signals[0].Label.Value);
 Console.WriteLine(String.Join(",", edf.Signals[0].Samples.Skip(0).Take(10).ToArray()));
-Console.WriteLine(edf1.Signals[1].Label.Value);
+Console.WriteLine(edf.Signals[1].Label.Value);
 Console.WriteLine(String.Join(",", edf.Signals[1].Samples.Skip(0).Take(10).ToArray()));
 
 //Edit the file
 edf.Signals[0].Label.Value = "Signal 1";
-edf.Signals[0].Label.Value = "Signal 1";
+edf.Signals[0].Label.Value = "Signal 2";
 edf.Header.Reserved.Value = "Some extra metadata";
-edf.Signals[1].Samples = new short[] { 100, 120, 150, 200, 300, 270, 230, 190, 139, 150};
+edf.Signals[1].Samples = new short[] { 100, 120, 150, 200, 300, 270, 230, 190, 139, 150 };
 
-edf1.Save(@"C:\edited.edf");
+edf.Save(@"C:\edited.edf");
 ```
 
 ### Header Record 
