@@ -22,6 +22,7 @@ int main(void){
 	int numberOfDataRecords;
 	int durationOfDataRecord;
 	int numberOfSignals;
+	char labels[10][16];  //Max 10 labels, each 16 ascii chars in length
 
 	FILE *pFile = fopen("C:\\temp\\ecg\\snap64.edf", "r");
     if (pFile == NULL) {
@@ -40,6 +41,14 @@ int main(void){
 	ReadInt(pFile, 8, &numberOfDataRecords); 	//NumberOfDataRecords
 	ReadInt(pFile, 8, &durationOfDataRecord); 	//DurationOfDataRecord
 	ReadInt(pFile, 4, &numberOfSignals); 		//NumberOfSignals
+
+	//------ Variable length header part -------
+	for (size_t i = 0; i < numberOfSignals && i < 10; i++)
+	{
+		char signalLabel[16] = { 0 };
+		ReadAscii(pFile, 16, signalLabel);
+		strcpy(labels[i], signalLabel);
+	}
 }
 
 void ReadAscii(FILE * pFile, size_t length, char * charBuffOut){
