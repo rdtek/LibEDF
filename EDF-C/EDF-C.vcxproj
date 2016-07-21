@@ -145,7 +145,6 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="EDF-C.c" />
     <ClCompile Include="logging.c" />
     <ClCompile Include="main.c" />
   </ItemGroup>
