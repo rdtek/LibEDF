@@ -61,25 +61,42 @@ void edf_printHeader(EDFHeader h) {
 	if (ns <= 0) return;
 	
 	edf_stringArrayToAscii(h.labels, 16, ns);
-	//TODO: print the signal metadata
-	
+	edf_stringArrayToAscii(h.transducers, 80, ns);
+	edf_stringArrayToAscii(h.physicalDimensions, 8, ns);
+	edf_doubleArrayToAscii(h.physicalMinimums, 8, ns);
+	edf_doubleArrayToAscii(h.physicalMaximums, 8, ns);
+
+	return;
 }
 
 void edf_stringArrayToAscii(char * ptr_strArray, size_t itemSize, int numberOfItems) {
 	
-	char * ptr_nextString = ptr_strArray;
+	char * ptr_string = ptr_strArray;
+
+	printf("\n[");
 	for (size_t i = 0; i < numberOfItems; i++)
 	{
-		printf("[\n]");
-		for (size_t i = 0; i < itemSize; i++)
-		{
-			//TODO: fix this to print string correctly.
-			printf("[%c]", itemSize, *ptr_strArray++);
+		for (size_t i = 0; i < itemSize; i++) {
+			printf("%c", ptr_string[i]);
 		}
-		
 		if (i >= numberOfItems - 1) break;
-		ptr_nextString += itemSize;
+		ptr_string += itemSize;
 	}
+	printf("]");
+}
+
+void edf_doubleArrayToAscii(double * ptr_doubleArray, size_t itemSize, int numberOfItems) {
+
+	double * ptr_nextDouble = ptr_doubleArray;
+
+	printf("\n[");
+	for (size_t i = 0; i < numberOfItems; i++) {
+		char strDouble[50];
+		sprintf(strDouble, "%f", ptr_nextDouble[i]);
+		printf("%.*s", itemSize, strDouble); //TODO: set printf padding to itemSize
+		if (i >= numberOfItems - 1) break;
+	}
+	printf("]");
 }
 
 void edf_readAscii(FILE * pFile, size_t numBytes, char * ptr_charBuffOut) {
@@ -107,6 +124,7 @@ void edf_readDouble(FILE * pFile, size_t numBytes, double * prt_doubleOut) {
 	char strNumber[10] = { 0 };
 	edf_readAscii(pFile, numBytes, strNumber);
 	*prt_doubleOut = strtod(strNumber, NULL);
+	return;
 }
 
 void edf_readMultipleDouble(FILE * pFile, size_t numBytes, double * ptr_doubleArrayOut, int numberOfItems)
