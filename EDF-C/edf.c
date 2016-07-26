@@ -3,29 +3,7 @@
 void edf_readEDF(const char * edfFileName) {
 	printf("Reading EDF file header...");
 
-	char version[9] = { 0 };
-	char patientID[81] = { 0 };
-	char recordID[81] = { 0 };
-	char startDate[9] = { 0 };
-	char startTime[9] = { 0 };
-	int numberOfBytesInHeader;
-	char reserved[45] = { 0 };
-	int numberOfDataRecords;
-	int durationOfDataRecord;
-	int numberOfSignals;
-
-	//Max 10 signals
-	char labels[10][16];
-
-	char transducers[10][80];
-	char physicalDimensions[10][8];
-	double physicalMinimums[10][8];
-	double physicalMaximums[10][8];
-	int digitalMinimums[10][8];
-	int digitalMaximums[10][8];
-	char prefiltering[10][80];
-	int numberOfSamplesInDataRecord[10];
-	char signalsReserved[10][32];
+	EDFHeader edfHead;
 
 	FILE *pFile = fopen(edfFileName, "r");
 	if (pFile == NULL) {
@@ -34,34 +12,74 @@ void edf_readEDF(const char * edfFileName) {
 	}
 
 	//------ Fixed length header part --------
-	edf_readAscii(pFile, 8, version);
-	edf_readAscii(pFile, 80, patientID);
-	edf_readAscii(pFile, 80, recordID);
-	edf_readAscii(pFile, 8, startDate);
-	edf_readAscii(pFile, 8, startTime);
-	edf_readInt(pFile, 8, &numberOfBytesInHeader);
-	edf_readAscii(pFile, 44, reserved);
-	edf_readInt(pFile, 8, &numberOfDataRecords);
-	edf_readInt(pFile, 8, &durationOfDataRecord);
-	edf_readInt(pFile, 4, &numberOfSignals);
+	edf_readAscii(pFile, 8, edfHead.version);
+	edf_readAscii(pFile, 80, edfHead.patientID);
+	edf_readAscii(pFile, 80, edfHead.recordID);
+	edf_readAscii(pFile, 8, edfHead.startDate);
+	edf_readAscii(pFile, 8, edfHead.startTime);
+	edf_readInt(pFile, 8, &(edfHead.numberOfBytesInHeader));
+	edf_readAscii(pFile, 44, edfHead.reserved);
+	edf_readInt(pFile, 8, &(edfHead.numberOfDataRecords));
+	edf_readInt(pFile, 8, &(edfHead.durationOfDataRecord));
+	edf_readInt(pFile, 4, &(edfHead.numberOfSignals));
 
 	//------ Variable length header part -------
 
-	int ns = numberOfSignals;
+	int ns = edfHead.numberOfSignals;
 	if (ns <= 0) return 2; //No signal data to read
 
-	edf_readMultipleAscii(pFile, 16, labels, ns);
-	edf_readMultipleAscii(pFile, 80, transducers, ns);
-	edf_readMultipleAscii(pFile, 8, physicalDimensions, ns);
-	edf_readMultipleDouble(pFile, 8, physicalMinimums, ns);
-	edf_readMultipleDouble(pFile, 8, physicalMaximums, ns);
-	edf_readMultipleInt(pFile, 8, digitalMinimums, ns);
-	edf_readMultipleInt(pFile, 8, digitalMaximums, ns);
-	edf_readMultipleAscii(pFile, 80, prefiltering, ns);
-	edf_readMultipleInt(pFile, 8, numberOfSamplesInDataRecord, ns);
-	edf_readMultipleAscii(pFile, 32, signalsReserved, ns);
+	edf_readMultipleAscii(pFile, 16, edfHead.labels, ns);
+	edf_readMultipleAscii(pFile, 80, edfHead.transducers, ns);
+	edf_readMultipleAscii(pFile, 8, edfHead.physicalDimensions, ns);
+	edf_readMultipleDouble(pFile, 8, edfHead.physicalMinimums, ns);
+	edf_readMultipleDouble(pFile, 8, edfHead.physicalMaximums, ns);
+	edf_readMultipleInt(pFile, 8, edfHead.digitalMinimums, ns);
+	edf_readMultipleInt(pFile, 8, edfHead.digitalMaximums, ns);
+	edf_readMultipleAscii(pFile, 80, edfHead.prefiltering, ns);
+	edf_readMultipleInt(pFile, 8, edfHead.numberOfSamplesInDataRecord, ns);
+	edf_readMultipleAscii(pFile, 32, edfHead.signalsReserved, ns);
+
+	edf_printHeader(edfHead);
 
 	//TODO: read signal sample values into arrays if necessary.
+}
+
+void edf_printHeader(EDFHeader h) {
+	
+	printf("\n[%s]", h.version);
+	printf("\n[%s]", h.patientID);
+	printf("\n[%s]", h.recordID);
+	printf("\n[%s]", h.startDate);
+	printf("\n[%s]", h.startTime);
+	printf("\n[%d]", h.numberOfBytesInHeader);
+	printf("\n[%s]", h.reserved);
+	printf("\n[%d]", h.numberOfDataRecords);
+	printf("\n[%d]", h.durationOfDataRecord);
+	printf("\n[%d]", h.numberOfSignals);
+
+	int ns = h.numberOfSignals;
+	if (ns <= 0) return;
+	
+	edf_stringArrayToAscii(h.labels, 16, ns);
+	//TODO: print the signal metadata
+	
+}
+
+void edf_stringArrayToAscii(char * ptr_strArray, size_t itemSize, int numberOfItems) {
+	
+	char * ptr_nextString = ptr_strArray;
+	for (size_t i = 0; i < numberOfItems; i++)
+	{
+		printf("[\n]");
+		for (size_t i = 0; i < itemSize; i++)
+		{
+			//TODO: fix this to print string correctly.
+			printf("[%c]", itemSize, *ptr_strArray++);
+		}
+		
+		if (i >= numberOfItems - 1) break;
+		ptr_nextString += itemSize;
+	}
 }
 
 void edf_readAscii(FILE * pFile, size_t numBytes, char * ptr_charBuffOut) {
@@ -69,9 +87,9 @@ void edf_readAscii(FILE * pFile, size_t numBytes, char * ptr_charBuffOut) {
 	char readBuff[201] = { 0 };
 	if (numBytes > 200) numBytes = 200;
 	numBytesRead = fread(readBuff, 1, numBytes, pFile);
-	strncpy(ptr_charBuffOut, readBuff, numBytes);
-	printf("\n# bytes: %d \t", numBytesRead);
-	printf("[%.*s]", numBytes, ptr_charBuffOut);
+	strncpy(ptr_charBuffOut, readBuff, numBytes + 1);
+	//printf("\n# bytes: %d \t", numBytesRead);
+	//printf("[%.*s]", numBytes, ptr_charBuffOut);
 }
 
 void edf_readMultipleAscii(FILE * pFile, size_t numBytes, char * ptr_stringArrayOut, int numberOfItems)
