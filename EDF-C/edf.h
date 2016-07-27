@@ -6,13 +6,13 @@
 
 typedef struct {
 
-	char version[9];// = { 0 };
-	char patientID[81];// = { 0 };
-	char recordID[81];// = { 0 };
-	char startDate[9];// = { 0 };
-	char startTime[9];// = { 0 };
+	char version[9];
+	char patientID[81];
+	char recordID[81];
+	char startDate[9];
+	char startTime[9];
 	int numberOfBytesInHeader;
-	char reserved[45];// = { 0 };
+	char reserved[45];
 	int numberOfDataRecords;
 	int durationOfDataRecord;
 	int numberOfSignals;
@@ -51,12 +51,15 @@ void edf_readMultipleDouble
     (FILE * pFile, size_t numBytes, double * ptr_doubleArrayOut, int numberOfItems);
 
 void edf_printHeader
-    (EDFHeader edfHead);
+    ();
 
-void edf_stringArrayToAscii
+void edf_stringsToAscii
     (char * ptr_strArray, size_t itemSize, int numberOfItems);
 
-void edf_doubleArrayToAscii
+void edf_doublesToAscii
     (double * ptr_doubleArray, size_t itemSize, int numberOfItems);
+
+void edf_intsToAscii
+    (int * ptr_intArray, size_t itemSize, int numberOfItems);
 
 #endif

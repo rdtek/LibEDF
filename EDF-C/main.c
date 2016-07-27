@@ -3,9 +3,11 @@
 
 int main(void){
 
-	edf_readEDF("C:\\temp\\ecg\\snap64.edf");
+	int readResult = edf_readEDF("C:\\temp\\ecg\\snap64.edf");
 	
-	printf("\nPress Any Key to Continue\n");
+	if(readResult == 1) edf_printHeader();
+
+	printf("\n\nPress Any Key to Continue\n");
 	getchar();
 
     return 0;
