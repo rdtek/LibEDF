@@ -21,10 +21,10 @@
     <ClCompile Include="logging.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="main.c">
+    <ClCompile Include="example.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="edf.c">
+    <ClCompile Include="libedf.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -32,7 +32,7 @@
     <ClInclude Include="logging.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="edf.h">
+    <ClInclude Include="libedf.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

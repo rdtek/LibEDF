@@ -57,6 +57,8 @@ namespace EDFSharpTests
 
             string edfFilePath = @"C:\temp\test1.EDF";
 
+            edf1.Save(edfFilePath);
+
             //Read the file back
             var edf2 = new EDFFile(edfFilePath);
 

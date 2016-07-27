@@ -73,9 +73,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\EDFSharpLib\EDFSharpLib.csproj">
+    <ProjectReference Include="..\LibEDF_CSharp\LibEDF_CSharp.csproj">
       <Project>{7e8b16eb-eb43-4a0f-b4aa-d00bfe41ebe2}</Project>
-      <Name>EDFSharpLib</Name>
+      <Name>LibEDF_CSharp</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>
