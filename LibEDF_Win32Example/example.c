@@ -4,6 +4,8 @@
 
 int main(void){
 
+	edf_printLibVersion();
+
 	int readResult = edf_readEDF("C:\\temp\\test1.edf", true);
 	
 	if(readResult == 1) edf_printHeader();
