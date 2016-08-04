@@ -1,7 +1,8 @@
 # LibEDF Win32 Example
 
 Small C program demonstrating import of LibEDF Dll and calling functions from the Dll.  
-So far it reads the header of an EDF file and prints the header fields to the console.
+    
+The example code reads the EDF file header and prints the header fields to the console.
 
 ```c
 #include <stdlib.h>
