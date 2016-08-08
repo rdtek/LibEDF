@@ -2,82 +2,51 @@
 
 namespace EDFSharp
 {
-    public class HeaderItemInfo
+    public class EDFField
     {
         public string Name { get; set; }
         public int AsciiLength { get; set; }
+
+        public EDFField() { };
+
+        public EDFField(string name, int asciiLength) {
+            Name = name;
+            AsciiLength = asciiLength;
+        }
     }
 
     public class HeaderItems
     {
         //Fixed length header items
 
-        public static HeaderItemInfo Version { get; } 
-            = new HeaderItemInfo { AsciiLength = 8, Name = "Version" };
-
-        public static HeaderItemInfo PatientID { get; } 
-            = new HeaderItemInfo { AsciiLength = 80, Name = "PatientID" };
-
-        public static HeaderItemInfo RecordID { get; private set; } 
-            = new HeaderItemInfo { AsciiLength = 80, Name = "RecordID" };
-
-        public static HeaderItemInfo StartDate { get; private set; } 
-            = new HeaderItemInfo { AsciiLength = 8, Name = "StartDate" };
-
-        public static HeaderItemInfo StartTime { get; private set; } 
-            = new HeaderItemInfo { AsciiLength = 8, Name = "StartTime" };
-
-        public static HeaderItemInfo NumberOfBytesInHeader { get; private set; } 
-            = new HeaderItemInfo { AsciiLength = 8, Name = "NumberOfBytesInHeader" };
-
-        public static HeaderItemInfo Reserved { get; private set; } 
-            = new HeaderItemInfo { AsciiLength = 44, Name = "Reserved" };
-
-        public static HeaderItemInfo NumberOfDataRecords { get; private set; } 
-            = new HeaderItemInfo { AsciiLength = 8, Name = "NumberOfDataRecords" };
-
-        public static HeaderItemInfo DurationOfDataRecord { get; private set; } 
-            = new HeaderItemInfo { AsciiLength = 8, Name = "DurationOfDataRecord" };
-
-        public static HeaderItemInfo NumberOfSignals { get; private set; } 
-            = new HeaderItemInfo { AsciiLength = 4, Name = "NumberOfSignals" };
+        public static EDFField Version { get; } = new EDFField("Version", 8);
+        public static EDFField PatientID { get; } = new EDFField("PatientID", 80);
+        public static EDFField RecordID { get; private set; } = new EDFField("RecordID", 80);
+        public static EDFField StartDate { get; private set; } = new EDFField("StartDate", 8);
+        public static EDFField StartTime { get; private set; } = new EDFField("StartTime", 8);
+        public static EDFField NumberOfBytesInHeader { get; private set; } = new EDFField("NumberOfBytesInHeader", 8);
+        public static EDFField Reserved { get; private set; }  = new EDFField("Reserved", 44);
+        public static EDFField NumberOfDataRecords { get; private set; } = new EDFField("NumberOfDataRecords", 8);
+        public static EDFField DurationOfDataRecord { get; private set; } = new EDFField("DurationOfDataRecord", 8);
+        public static EDFField NumberOfSignals { get; private set; } = new EDFField("NumberOfSignals", 4);
 
         //Variable length header items
 
-        public static HeaderItemInfo Label { get; private set; }
-            = new HeaderItemInfo { AsciiLength = 16, Name = "Labels" };
-
-        public static HeaderItemInfo TransducerType { get; private set; }
-           = new HeaderItemInfo { AsciiLength = 80, Name = "TransducerType" };
-
-        public static HeaderItemInfo PhysicalDimension { get; private set; }
-           = new HeaderItemInfo { AsciiLength = 8, Name = "PhysicalDimension" };
-
-        public static HeaderItemInfo PhysicalMinimum { get; private set; }
-           = new HeaderItemInfo { AsciiLength = 8, Name = "PhysicalMinimum" };
-
-        public static HeaderItemInfo PhysicalMaximum { get; private set; }
-           = new HeaderItemInfo { AsciiLength = 8, Name = "PhysicalMaximum" };
-
-        public static HeaderItemInfo DigitalMinimum { get; private set; }
-           = new HeaderItemInfo { AsciiLength = 8, Name = "DigitalMinimum" };
-
-        public static HeaderItemInfo DigitalMaximum { get; private set; }
-           = new HeaderItemInfo { AsciiLength = 8, Name = "DigitalMaximum" };
-
-        public static HeaderItemInfo Prefiltering { get; private set; }
-           = new HeaderItemInfo { AsciiLength = 80, Name = "Prefiltering" };
-
-        public static HeaderItemInfo NumberOfSamplesInDataRecord { get; private set; }
-           = new HeaderItemInfo { AsciiLength = 8, Name = "NumberOfSamplesInDataRecord" };
-
-        public static HeaderItemInfo SignalsReserved { get; private set; }
-           = new HeaderItemInfo { AsciiLength = 32, Name = "SignalsReserved" };
+        public static EDFField Label { get; private set; } = new EDFField("Labels", 16);
+        public static EDFField TransducerType { get; private set; } = new EDFField("TransducerType", 80);
+        public static EDFField PhysicalDimension { get; private set; } = new EDFField("PhysicalDimension", 8);
+        public static EDFField PhysicalMinimum { get; private set; } = new EDFField("PhysicalMinimum", 8);
+        public static EDFField PhysicalMaximum { get; private set; } = new EDFField("PhysicalMaximum", 8);
+        public static EDFField DigitalMinimum { get; private set; } = new EDFField("DigitalMinimum", 8);
+        public static EDFField DigitalMaximum { get; private set; } = new EDFField("DigitalMaximum", 8);
+        public static EDFField Prefiltering { get; private set; } = new EDFField("Prefiltering", 80);
+        public static EDFField NumberOfSamplesInDataRecord { get; private set; } = new EDFField("NumberOfSamplesInDataRecord", 8);
+        public static EDFField SignalsReserved { get; private set; } = new EDFField("SignalsReserved", 32);
     }
 
     public abstract class HeaderItem
     {
-        public HeaderItem(HeaderItemInfo info) {
+        public HeaderItem(EDFField info) {
             Name = info.Name;
             AsciiLength = info.AsciiLength;
         }
@@ -89,7 +58,7 @@ namespace EDFSharp
     public class FixedLengthString : HeaderItem
     {
         public string Value { get; set; }
-        public FixedLengthString(HeaderItemInfo info) : base(info) { }
+        public FixedLengthString(EDFField info) : base(info) { }
 
         public override string ToAscii() {
             string asciiString = "";
@@ -105,7 +74,7 @@ namespace EDFSharp
     public class FixedLengthInt : HeaderItem
     {
         public int Value { get; set; }
-        public FixedLengthInt(HeaderItemInfo info) : base(info) { }
+        public FixedLengthInt(EDFField info) : base(info) { }
 
         public override string ToAscii()
         {
@@ -122,7 +91,7 @@ namespace EDFSharp
     public class FixedLengthDouble : HeaderItem
     {
         public double Value { get; set; }
-        public FixedLengthDouble(HeaderItemInfo info) : base(info) { }
+        public FixedLengthDouble(EDFField info) : base(info) { }
 
         public override string ToAscii()
         {
@@ -146,7 +115,7 @@ namespace EDFSharp
     public class VariableLengthString : HeaderItem
     {
         public string[] Value { get; set; }
-        public VariableLengthString(HeaderItemInfo info) : base(info) { }
+        public VariableLengthString(EDFField info) : base(info) { }
 
         public override string ToAscii() {
             string ascii = "";
@@ -164,7 +133,7 @@ namespace EDFSharp
     public class VariableLengthInt : HeaderItem
     {
         public int[] Value { get; set; }
-        public VariableLengthInt(HeaderItemInfo info) : base(info) { }
+        public VariableLengthInt(EDFField info) : base(info) { }
 
         public override string ToAscii() {
             string ascii = "";
@@ -182,7 +151,7 @@ namespace EDFSharp
     public class VariableLengthDouble : HeaderItem
     {
         public double[] Value { get; set; }
-        public VariableLengthDouble(HeaderItemInfo info) : base(info) { }
+        public VariableLengthDouble(EDFField info) : base(info) { }
 
         public override string ToAscii() {
             string ascii = "";

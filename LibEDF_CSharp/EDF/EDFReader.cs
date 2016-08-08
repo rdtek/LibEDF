@@ -85,7 +85,7 @@ namespace EDFSharp
             return samples.ToArray();
         }
 
-        private Int16 ReadInt16(HeaderItemInfo itemInfo)
+        private Int16 ReadInt16(EDFField itemInfo)
         {
             string strInt = ReadAscii(itemInfo).Trim();
             Int16 intResult = -1;
@@ -94,13 +94,13 @@ namespace EDFSharp
             return intResult;
         }
 
-        private string ReadAscii(HeaderItemInfo itemInfo)
+        private string ReadAscii(EDFField itemInfo)
         {
             byte[] bytes = this.ReadBytes(itemInfo.AsciiLength);
             return AsciiString(bytes);
         }
 
-        private string[] ReadMultipleAscii(HeaderItemInfo itemInfo, int numberOfParts)
+        private string[] ReadMultipleAscii(EDFField itemInfo, int numberOfParts)
         {
             var parts = new List<string>();
 
@@ -112,7 +112,7 @@ namespace EDFSharp
             return parts.ToArray();
         }
 
-        private int[] ReadMultipleInt(HeaderItemInfo itemInfo, int numberOfParts)
+        private int[] ReadMultipleInt(EDFField itemInfo, int numberOfParts)
         {
             var parts = new List<int>();
 
@@ -126,7 +126,7 @@ namespace EDFSharp
             return parts.ToArray();
         }
 
-        private double[] ReadMultipleDouble(HeaderItemInfo itemInfo, int numberOfParts)
+        private double[] ReadMultipleDouble(EDFField itemInfo, int numberOfParts)
         {
             var parts = new List<double>();
 

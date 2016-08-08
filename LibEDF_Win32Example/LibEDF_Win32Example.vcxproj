@@ -160,9 +160,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="logging.c" />
     <ClCompile Include="example.c" />
   </ItemGroup>
