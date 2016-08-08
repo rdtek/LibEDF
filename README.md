@@ -6,7 +6,7 @@ This project is provided under the terms of the [MIT license](http://choosealice
 ### Usage
 
 ```cs
-//Load an existing EDF file.
+//Load an EDF file.
 var edf = new EDFFile(@"C:\temp\example.edf");
  
 //Print some info
