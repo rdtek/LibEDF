@@ -4,7 +4,7 @@ Library to read and write EDF signal files as defined in the [EDF specification]
 
 This project is provided under the terms of the [MIT license](http://choosealicense.com/licenses/mit/).
 
-### Usage
+### C# Usage
 
 ```cs
 //Load an EDF file.
