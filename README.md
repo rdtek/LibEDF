@@ -1,5 +1,5 @@
 # EDF-Sharp
-![EDF file icon](edf_fileicon.png?raw=true "EDF file icon")
+![EDF file icon](edf_icon.png?raw=true "EDF file icon")
 
 Library to read and write EDF signal format files as defined in the [EDF specification](http://www.edfplus.info/specs/edf.html).
 
