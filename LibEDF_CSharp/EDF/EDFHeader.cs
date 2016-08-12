@@ -7,7 +7,7 @@ namespace EDFSharp
         public string Name { get; set; }
         public int AsciiLength { get; set; }
 
-        public EDFField() { };
+        public EDFField() { }
 
         public EDFField(string name, int asciiLength) {
             Name = name;

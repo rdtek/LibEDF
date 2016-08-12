@@ -2,12 +2,57 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Linq;
 
 namespace EDFSharp
 {
     class EDFWriter : BinaryWriter
     {
         public EDFWriter(FileStream fs) : base(fs) { }
+
+        public void WriteEDF(EDFFile edf, string edfFilePath)
+        {
+            edf.Header.NumberOfBytesInHeader.Value = CalcNumOfBytesInHeader(edf);
+
+            //----------------- Fixed length header items -----------------
+            WriteItem(edf.Header.Version);
+            WriteItem(edf.Header.PatientID);
+            WriteItem(edf.Header.RecordID);
+            WriteItem(edf.Header.StartDate);
+            WriteItem(edf.Header.StartTime);
+            WriteItem(edf.Header.NumberOfBytesInHeader);
+            WriteItem(edf.Header.Reserved);
+            WriteItem(edf.Header.NumberOfDataRecords);
+            WriteItem(edf.Header.DurationOfDataRecord);
+            WriteItem(edf.Header.NumberOfSignals);
+
+            //----------------- Variable length header items -----------------
+            WriteItem(edf.Signals.Select(s => s.Label));
+            WriteItem(edf.Signals.Select(s => s.TransducerType));
+            WriteItem(edf.Signals.Select(s => s.PhysicalDimension));
+            WriteItem(edf.Signals.Select(s => s.PhysicalMinimum));
+            WriteItem(edf.Signals.Select(s => s.PhysicalMaximum));
+            WriteItem(edf.Signals.Select(s => s.DigitalMinimum));
+            WriteItem(edf.Signals.Select(s => s.DigitalMaximum));
+            WriteItem(edf.Signals.Select(s => s.Prefiltering));
+            WriteItem(edf.Signals.Select(s => s.NumberOfSamples));
+            WriteItem(edf.Signals.Select(s => s.Reserved));
+
+            Console.WriteLine("Writer position after header: " + BaseStream.Position);
+            Console.WriteLine("Writing signals.");
+            foreach (var sig in edf.Signals) WriteSignal(sig);
+
+            Close();
+            Console.WriteLine("File size: " + File.ReadAllBytes(edfFilePath).Length);
+        }
+
+        private int CalcNumOfBytesInHeader(EDFFile edf)
+        {
+            int totalFixedLength = 256;
+            int ns = edf.Signals.Length;
+            int totalVariableLength = ns * 16 + (ns * 80) * 2 + (ns * 8) * 6 + (ns * 32);
+            return totalFixedLength + totalVariableLength;
+        }
 
         public void WriteItem(HeaderItem headerItem)
         {
