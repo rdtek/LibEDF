@@ -51,8 +51,17 @@ namespace LibEDF_CSharpExample
                 "\nNumber of signals:\t" + edfFile.Header.NumberOfSignals.Value +
                 "\nStart date:\t\t"      + edfFile.Header.StartDate.Value +
                 "\nSignal label:\t\t"    + edfFile.Signals[0].Label.Value +
-                "\nSignal samples:\t\t" + String.Join(",", edfFile.Signals[0].Samples.Skip(0).Take(10).ToArray())
+                "\nSignal samples:\t\t" 
+                    + String.Join(",", edfFile.Signals[0].Samples.Skip(0).Take(10).ToArray()) 
+                    + "\n\n"
              );
+
+            //Save the file
+            string fileName = @"C:\temp\example.edf";
+            edfFile.Save(fileName);
+
+            //Read the file
+            var f = new EDFFile(fileName);
 
             Console.ReadLine();
         }
