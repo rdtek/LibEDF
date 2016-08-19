@@ -1,5 +1,7 @@
 ![EDF file icon](Doc/edflib_icon.png?raw=true "EDF file icon")
 
+## Summary
+
 LibEDF is a library to read and write EDF signal files as defined in the [EDF specification](http://www.edfplus.info/specs/edf.html).
 
 This project is provided under the terms of the [MIT license](http://choosealicense.com/licenses/mit/).
