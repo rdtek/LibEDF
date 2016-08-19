@@ -1,4 +1,4 @@
-![EDF file icon](edflib_icon.png?raw=true "EDF file icon")
+![EDF file icon](Doc/edflib_icon.png?raw=true "EDF file icon")
 
 Library to read and write EDF signal files as defined in the [EDF specification](http://www.edfplus.info/specs/edf.html).
 
@@ -60,6 +60,8 @@ edfFile.Save(fileName);
 //Read the file
 var f = new EDFFile(fileName);
 ```
+
+![Console example](Doc/edf_example_console.png?raw=true)
 
 ### Header Record 
 
