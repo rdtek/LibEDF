@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using EDFSharp;
+using LibEDF_CSharp;
 using System.Linq;
 
 namespace EDFSharpTests

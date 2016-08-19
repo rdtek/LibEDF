@@ -7,8 +7,8 @@
     <ProjectGuid>{7E8B16EB-EB43-4A0F-B4AA-D00BFE41EBE2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>EDFSharp</RootNamespace>
-    <AssemblyName>EDFSharpLib</AssemblyName>
+    <RootNamespace>LibEDF</RootNamespace>
+    <AssemblyName>LibEDF</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

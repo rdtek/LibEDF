@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("EDFSharpLib")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("LibEDF")]
+[assembly: AssemblyDescription("LibEDF - read and write EDF signal files.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("EDFSharpLib")]
+[assembly: AssemblyCompany("RDTEK")]
+[assembly: AssemblyProduct("LibEDF")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

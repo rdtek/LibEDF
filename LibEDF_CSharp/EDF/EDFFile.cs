@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Runtime.InteropServices;
 
-namespace EDFSharp
+namespace LibEDF_CSharp
 {
     [InterfaceType(ComInterfaceType.InterfaceIsIDispatch),
        Guid("29757a02-8a0c-47e2-96bb-2266c993c97a")]

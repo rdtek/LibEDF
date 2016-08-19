@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using System.Linq;
 
-namespace EDFSharp
+namespace LibEDF_CSharp
 {
     class EDFWriter : BinaryWriter
     {

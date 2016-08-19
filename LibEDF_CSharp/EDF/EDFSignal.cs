@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace EDFSharp
+namespace LibEDF_CSharp
 {
     public class EDFSignal
     {
@@ -9,8 +9,8 @@ namespace EDFSharp
         public FixedLengthString PhysicalDimension  { get; } = new FixedLengthString(HeaderItems.PhysicalDimension);
         public FixedLengthDouble PhysicalMinimum    { get; } = new FixedLengthDouble(HeaderItems.PhysicalMinimum);
         public FixedLengthDouble PhysicalMaximum    { get; } = new FixedLengthDouble(HeaderItems.PhysicalMaximum);
-        public FixedLengthInt DigitalMinimum     { get; } = new FixedLengthInt(HeaderItems.DigitalMinimum);
-        public FixedLengthInt DigitalMaximum     { get; } = new FixedLengthInt(HeaderItems.DigitalMaximum);
+        public FixedLengthInt DigitalMinimum        { get; } = new FixedLengthInt(HeaderItems.DigitalMinimum);
+        public FixedLengthInt DigitalMaximum        { get; } = new FixedLengthInt(HeaderItems.DigitalMaximum);
         public FixedLengthString Prefiltering       { get; } = new FixedLengthString(HeaderItems.Prefiltering);
         public FixedLengthInt NumberOfSamples       { get; } = new FixedLengthInt(HeaderItems.NumberOfSamplesInDataRecord);
         public FixedLengthString Reserved           { get; } = new FixedLengthString(HeaderItems.SignalsReserved);

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EDFSharp
+namespace LibEDF_CSharp
 {
     public class EDFField
     {
