@@ -6,7 +6,7 @@ This project is provided under the terms of the [MIT license](http://choosealice
 
 ### C# Usage
 
-The project LibEDF_CSharp builds to create a COM visible DLL.
+The project LibEDF_CSharp builds to create a COM visible DLL.  
 To use the library in a C# project reference the LibEDF_CSharp project or DLL and use the namespace LibEDF_CSharp as shown in the example code below.
 
 ```cs
