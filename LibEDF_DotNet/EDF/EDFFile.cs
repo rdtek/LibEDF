@@ -1,12 +1,13 @@
 ﻿using System.IO;
 using System.Runtime.InteropServices;
 
-namespace LibEDF_CSharp
+namespace LibEDF_DotNet
 {
     [InterfaceType(ComInterfaceType.InterfaceIsIDispatch),
        Guid("29757a02-8a0c-47e2-96bb-2266c993c97a")]
     public interface IEDFFile
     {
+        //Expose methods for COM use
         void Open(string edfFilePath);
         void Open(byte[] edfBytes);
         void Save(string edfFilePath);
@@ -25,6 +26,12 @@ namespace LibEDF_CSharp
         }
 
         public EDFFile(byte[] edfBytes){
+            Open(edfBytes);
+        }
+
+        public void ReadBase64(string edfBase64)
+        {
+            byte[] edfBytes = System.Convert.FromBase64String(edfBase64);
             Open(edfBytes);
         }
 
