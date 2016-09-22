@@ -1,12 +1,20 @@
-![EDF file icon](edflib_icon.png?raw=true "EDF file icon")
+![EDF file icon](Doc/edflib_icon.png?raw=true "EDF file icon")
 
-Library to read and write EDF signal files as defined in the [EDF specification](http://www.edfplus.info/specs/edf.html).
+## Summary
+
+LibEDF is a library to read and write EDF signal files as defined in the [EDF specification](http://www.edfplus.info/specs/edf.html).
 
 This project is provided under the terms of the [MIT license](http://choosealicense.com/licenses/mit/).
 
-### C# Usage
+## C# Usage
+
+The project LibEDF_CSharp builds to create a COM visible DLL.  
+To use the library in a C# project reference the LibEDF_CSharp project or DLL and use the namespace LibEDF_CSharp as shown in the example code below.
 
 ```cs
+using LibEDF_CSharp;
+...
+
 //Crreate an empty EDF file
 var edfFile = new EDFFile();
 
@@ -60,6 +68,12 @@ edfFile.Save(fileName);
 //Read the file
 var f = new EDFFile(fileName);
 ```
+
+![Console example screenshot](Doc/edf_example_console.png?raw=true)
+
+## Win32 usage
+The project LibEDF_Win32Dll builds to create an unmanaged .dll and associated .lib file.  
+Include those files and the header file libedf.h to call functions from an unmanaged Win32 project."
 
 ### Header Record 
 
